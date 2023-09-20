@@ -1,0 +1,160 @@
+:root {
+    margin: 0;
+    padding: 0;
+
+    --background-color: #f0ece9;
+    --h1-line: #c2a288;
+    --h1-text: #999896;
+    --button-green: #5bb85d;
+    --button-green-hover: #358537;
+    --button-red: #da534f;
+    --button-red-hover: #A13431;
+    --button-text: #ffffff;
+    --table-line1: #eef1fa;
+    --table-line2: #ffffff;
+    --tr-hover: #aef2e5;
+}
+
+body, h1, h2, h3{
+    margin: 0;
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--background-color);
+}
+
+.root {
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    margin-bottom: 30px;
+    position: relative;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+h1 {
+    z-index: 20;
+    width: 400px;
+    text-align: center;
+    background: var(--background-color);
+    color: var(--h1-text);
+}
+
+.h1-line {
+    z-index: 10;
+    position: absolute;
+    top: 50%;
+    height: 5px;
+    width: 100%;
+    background: var(--h1-line);
+}
+
+.manage-add-del {
+    margin-bottom: 20px;
+}
+
+.manage-btn {
+    margin-right: 20px;
+    width: 112px;
+    height: 40px;
+    font-size:medium;
+    color: var(--button-text);
+    border: solid 2px grey;
+}
+
+.page-btn {
+    margin-left: 20px;
+    width: 112px;
+    height: 40px;
+    font-size:medium;
+    color: var(--button-text);
+    border: solid 2px grey;
+}
+
+.green-btn {
+    background: var(--button-green);
+}
+
+.green-btn:hover {
+    background: var(--button-green-hover);
+}
+
+.red-btn {
+    background: var(--button-red);
+}
+
+.red-btn:hover {
+    background: var(--button-red-hover);
+}
+
+.page-text {
+    font-family: sans-serif;
+    font-size: large;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+footer {
+    display: flex;
+    margin-top: 30px;
+    justify-content: space-between;
+    align-items: end;
+}
+
+.table-box {
+    width: 1400px;
+    height: 560px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+table, th, td {
+    border: none;
+}
+
+tbody > tr:nth-child(even) {
+    background: var(--table-line1);
+}
+
+tbody > tr:nth-child(odd) {
+    background: var(--table-line2);
+}
+
+thead > tr {
+    background: var(--table-line1);
+}
+
+tbody > tr:hover {
+    background: var(--tr-hover);
+    cursor: pointer;
+}
+
+.table-box tbody > .selectedProduct {
+    background: var(--tr-hover);
+}
+
+th {
+    padding: 12px 40px;
+}
+
+td {
+    padding: 12px 40px;
+    text-align: center;
+}
+
+
