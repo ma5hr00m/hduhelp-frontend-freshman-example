@@ -19,6 +19,7 @@
     --dialog-input-background: #ebebe4;
     --dialog-input-border: #c2c0be;
     --dialog-line: #eeeeee;
+    --command-link-hover: blue;
 }
 
 body, h1, h2, h3{
@@ -234,8 +235,16 @@ aside {
     padding: 8px 56px;
 }
 
-.dialog-form-footer button:first-child {
-    margin-right: 40px;
+.dialog-form-footer button:nth-child(2) {
+    margin-left: 40px;
+}
+
+.command-link:hover {
+    color: var(--command-link-hover);
+}
+
+.view-link {
+    margin-right: 10px;
 }
 
 .diaplay {
