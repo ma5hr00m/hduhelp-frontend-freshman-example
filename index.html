@@ -48,7 +48,7 @@
                     </button>
                 </div>
             </footer>
-            <div class="dialog-mask"></div>
+            <div class="mask hidden"></div>
             <aside class="add-dialog hidden">
                 <div class="dialog-header">
                     <h2>添加产品信息</h2>
@@ -80,6 +80,67 @@
                     </form>
                 </div>
             </aside>
+            <aside class="view-dialog hidden">
+                <div class="dialog-header">
+                    <h2>产品详细信息</h2>
+                </div>
+                <div class="dialog-body">
+                    <form id="view-form" onsubmit="event.preventDefault();">
+                        <div class="dialog-form-body">
+                            <label for="id">序号</label>
+                            <span type="text" class="view-id"></span>
+                            <label for="title">名称</label>
+                            <span type="text" class="view-title"></span>
+                            <label for="category">描述</label>
+                            <span type="text" class="view-description"></span>
+                            <label for="price">价格</label>
+                            <span type="text" class="view-price"></span>
+                            <label for="rating">评级</label>
+                            <span type="text" class="view-rating"></span>
+                            <label for="category">分类</label>
+                            <span type="text" class="view-category"></span>
+                            <label for="stock">库存</label>
+                            <span type="text" class="view-stock"></span>    
+                        </div>
+                        <div class="dialog-form-footer">
+                            <button onclick="hiddenViewDialog()">
+                                取消
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </aside>
+            <aside class="edit-dialog hidden">
+                <div class="dialog-header">
+                    <h2>编辑产品信息</h2>
+                </div>
+                <div class="dialog-body">
+                    <form id="edit-form" onsubmit="event.preventDefault();">
+                        <div class="dialog-form-body">
+                            <label for="id">序号</label>
+                            <input type="text" class="edit-id" readonly></input>
+                            <label for="title">名称</label>
+                            <input type="text" class="edit-title"></input>
+                            <label for="price">价格</label>
+                            <input type="text" class="edit-price"></input>
+                            <label for="rating">评级</label>
+                            <input type="text" class="edit-rating"></input>
+                            <label for="category">分类</label>
+                            <input type="text" class="edit-category"></input>
+                            <label for="stock">库存</label>
+                            <input type="text" class="edit-stock"></input>    
+                        </div>
+                        <div class="dialog-form-footer">
+                            <button onclick="hiddenEditDialog()">
+                                取消
+                            </button>
+                            <button onclick="updateProduct()">
+                                更新
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </aside>
         </div>
     </body>
     <script>
@@ -88,6 +149,7 @@
         let productsList = []; // 存储所有产品信息的数组
         let selectedProduct = null; // 存储选中的产品信息的变量
         let selectedRow = null; // 存储选中的行元素
+        let selectedView = null; // 存储预览的行元素
 
         // show products
         fetch('https://dummyjson.com/products')
@@ -139,10 +201,16 @@
                 const commandCell = document.createElement('td');
                 const viewLink = document.createElement('a');
                 viewLink.textContent = 'View';
+                viewLink.classList.add('command-link');
+                viewLink.classList.add('view-link');
+                viewLink.addEventListener('click', () => displayViewDialog(product));
                 commandCell.appendChild(viewLink);
 
                 const editLink = document.createElement('a');
                 editLink.textContent = 'Edit';
+                editLink.classList.add('command-link');
+                editLink.classList.add('edit-link');
+                editLink.addEventListener('click', () => displayEditDialog(product));
                 commandCell.appendChild(editLink);
 
                 row.appendChild(commandCell);
@@ -199,16 +267,29 @@
             }
         }
 
+        function displayMask() {
+            const mask = document.querySelector('.mask');
+            mask.classList.remove('hidden');
+        }
+
+        function hiddenMask() {
+            const mask = document.querySelector('.mask');
+            mask.classList.add('hidden');
+        }
 
         function displayAddDialog() {
             const addDialog = document.querySelector('.add-dialog');
             addDialog.classList.remove('hidden');
+
+            displayMask();
         }
 
         function hiddenAddDialog() {
             const addDialog = document.querySelector('.add-dialog');
             addDialog.classList.add('hidden');
-            clearForm('add-form')
+            clearForm('add-form');
+
+            hiddenMask();
         }
 
         function addProduct() {
@@ -246,6 +327,40 @@
             clearForm('add-form')
         }
 
+        function updateProduct() {
+            const id = document.querySelector('.edit-id').value;
+            const title = document.querySelector('.edit-title').value;
+            const price = document.querySelector('.edit-price').value;
+            const rating = document.querySelector('.edit-rating').value;
+            const category = document.querySelector('.edit-category').value;
+            const stock = document.querySelector('.edit-stock').value;
+
+            const editProduct = {
+                title: title,
+                price: price,
+                rating: rating,
+                category: category,
+                stock: stock
+            };
+
+            fetch(`https://dummyjson.com/products/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(editProduct)
+            })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+                displayPage(currentPage);
+                hiddenEditDialog();
+            })
+            .catch(error => {
+                console.log('Error:', error);
+            });
+
+            clearForm('edit-form')
+        }
+
         function deleteProduct() {
             if (selectedProduct && selectedProduct.id) {
                 const id = selectedProduct.id;
@@ -257,6 +372,84 @@
             } else {
                 console.log("请选中一个产品！");
             }
+        }
+    
+        function displayViewDialog(product) {
+            selectedView = product;
+
+            const viewDialog = document.querySelector('.view-dialog');
+            viewDialog.classList.remove('hidden');
+            displayMask();
+
+            const selectedId = selectedView.id;
+            const selectedTitle = selectedView.title;
+            const selectedDescription = selectedView.description;
+            const selectedPrice = selectedView.price;
+            const selectedRating = selectedView.rating;
+            const selectedCategory = selectedView.category;
+            const selectedStock = selectedView.stock;
+
+            const idSpan = document.querySelector('.view-id');
+            const titleSpan = document.querySelector('.view-title');
+            const descriptionSpan = document.querySelector('.view-description');
+            const priceSpan = document.querySelector('.view-price');
+            const ratingSpan = document.querySelector('.view-rating');
+            const categorySpan = document.querySelector('.view-category');
+            const stockSpan = document.querySelector('.view-stock');
+
+            idSpan.textContent = selectedId;
+            titleSpan.textContent = selectedTitle;
+            descriptionSpan.textContent = selectedDescription;
+            priceSpan.textContent = selectedPrice;
+            ratingSpan.textContent = selectedRating;
+            categorySpan.textContent = selectedCategory;
+            stockSpan.textContent = selectedStock;
+        }
+
+        function hiddenViewDialog() {
+            const viewDialog = document.querySelector('.view-dialog');
+            viewDialog.classList.add('hidden');
+
+            hiddenMask();
+        }
+
+        function displayEditDialog(product) {
+            selectedView = product;
+
+            console.log(selectedView);
+
+            const editDialog = document.querySelector('.edit-dialog');
+            editDialog.classList.remove('hidden');
+            displayMask();
+
+            const selectedId = selectedView.id;
+            const selectedTitle = selectedView.title;
+            const selectedPrice = selectedView.price;
+            const selectedRating = selectedView.rating;
+            const selectedCategory = selectedView.category;
+            const selectedStock = selectedView.stock;
+
+            const idInput = document.querySelector('.edit-id');
+            console.log(idInput);
+            const titleInput = document.querySelector('.edit-title');
+            const priceInput = document.querySelector('.edit-price');
+            const ratingInput = document.querySelector('.edit-rating');
+            const categoryInput = document.querySelector('.edit-category');
+            const stockInput = document.querySelector('.edit-stock');
+
+            idInput.value = selectedId;
+            titleInput.value = selectedTitle;
+            priceInput.value = selectedPrice;
+            ratingInput.value = selectedRating;
+            categoryInput.value = selectedCategory;
+            stockInput.value = selectedStock;
+        }
+
+        function hiddenEditDialog() {
+            const viewDialog = document.querySelector('.edit-dialog');
+            viewDialog.classList.add('hidden');
+
+            hiddenMask();
         }
     </script>
 </html>
