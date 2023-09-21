@@ -13,14 +13,16 @@
             </header>
             <main>
                 <div class="manage-add-del">
-                    <button class="green-btn manage-btn pointer">新增</button>
+                    <button class="green-btn manage-btn pointer" onclick="displayAddDialog()">
+                        新增
+                    </button>
                     <button class="red-btn manage-btn pointer">删除</button>
                 </div>
                 <div class="table-box">
                     <table>
                         <thead>
                             <tr>
-                                <th>ID</th>
+                                <th>序号</th>
                                 <th>名称</th>
                                 <th>价格</th>
                                 <th>评级</th>
@@ -44,6 +46,38 @@
                     </button>
                 </div>
             </footer>
+            <div class="dialog-mask"></div>
+            <aside class="add-dialog hidden">
+                <div class="dialog-header">
+                    <h2>添加产品信息</h2>
+                </div>
+                <div class="dialog-body">
+                    <form id="add-form" onsubmit="event.preventDefault();">
+                        <div class="dialog-form-body">
+                            <label for="id">序号</label>
+                            <input type="text" id="id">
+                            <label for="title">名称</label>
+                            <input type="text" id="title">
+                            <label for="price">价格</label>
+                            <input type="text" id="price">
+                            <label for="rating">评级</label>
+                            <input type="text" id="rating">
+                            <label for="category">分类</label>
+                            <input type="text" id="category">
+                            <label for="stock">库存</label>
+                            <input type="text" id="stock">    
+                        </div>
+                        <div class="dialog-form-footer">
+                            <button onclick="hiddenAddDialog()">
+                                取消
+                            </button>
+                            <button type="submit" onclick="addProduct()">
+                                添加
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </aside>
         </div>
     </body>
     <script>
@@ -152,6 +186,62 @@
 
             selectedProduct = product;
             console.log(selectedProduct);
+        }
+
+        function clearForm(formId) {
+            const form = document.getElementById(formId);
+            const inputs = form.getElementsByTagName('input');
+
+            for (let i = 0; i < inputs.length; i++) {
+                inputs[i].value = '';
+            }
+        }
+
+
+        function displayAddDialog() {
+            const addDialog = document.querySelector('.add-dialog');
+            addDialog.classList.remove('hidden');
+        }
+
+        function hiddenAddDialog() {
+            const addDialog = document.querySelector('.add-dialog');
+            addDialog.classList.add('hidden');
+            clearForm('add-form')
+        }
+
+        function addProduct() {
+            const id = document.getElementById('id').value;
+            const title = document.getElementById('title').value;
+            const price = document.getElementById('price').value;
+            const rating = document.getElementById('rating').value;
+            const category = document.getElementById('category').value;
+            const stock = document.getElementById('stock').value;
+
+            const newProduct = {
+                id: id,
+                title: title,
+                price: price,
+                rating: rating,
+                category: category,
+                stock: stock
+            };
+
+            fetch('https://dummyjson.com/products/add', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newProduct)
+            })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+                displayPage(currentPage);
+                hiddenAddDialog();
+            })
+            .catch(error => {
+                console.log('Error:', error);
+            });
+
+            clearForm('add-form')
         }
     </script>
 </html>

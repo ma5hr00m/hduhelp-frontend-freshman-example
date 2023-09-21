@@ -13,6 +13,12 @@
     --table-line1: #eef1fa;
     --table-line2: #ffffff;
     --tr-hover: #aef2e5;
+    --dialog-background: #fff;
+    --dialog-header: #555555;
+    --dialog-h2: #edf4ef;
+    --dialog-input-background: #ebebe4;
+    --dialog-input-border: #c2c0be;
+    --dialog-line: #eeeeee;
 }
 
 body, h1, h2, h3{
@@ -157,4 +163,85 @@ td {
     text-align: center;
 }
 
+aside {
+    position: fixed;
+    z-index: 100;
+    left: 50%;
+    top: 50%;
+    translate: -50% -50%;
+    background: var(--dialog-background);
+}
 
+.mask {
+    z-index: 50;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    opacity: .5;
+}
+
+.dialog-header {
+    position: relative;
+    width: 100%;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--dialog-header);
+}
+
+.dialog-header > h2 {
+    color: var(--dialog-h2);
+}
+
+.dialog-form-body {
+    padding: 20px 100px;
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-gap: 10px;
+    grid-row-gap: 25px; /* 设置行间距为 10px */
+    grid-column-gap: 20px; /* 设置列间距为 10px */
+}
+
+
+.dialog-form-body label {
+    grid-column: 1;
+}
+
+.dialog-form-body input {
+    padding: 5px;
+    width: 260px;
+    grid-column: 2;
+    background: var(--dialog-input-background);
+    border: solid 1px var(--dialog-input-border);
+}
+
+.dialog-form-body input:focus {
+    outline: none;
+}
+
+.dialog-form-footer {
+    display: flex;
+    justify-content: center;
+    padding: 15px 30px;
+    border-top: solid 1px var(--dialog-line);
+}
+
+.dialog-form-footer button {
+    padding: 8px 56px;
+}
+
+.dialog-form-footer button:first-child {
+    margin-right: 40px;
+}
+
+.diaplay {
+    display: block;
+}
+
+.hidden {
+    display: none;
+}
