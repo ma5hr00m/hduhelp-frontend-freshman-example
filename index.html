@@ -16,7 +16,9 @@
                     <button class="green-btn manage-btn pointer" onclick="displayAddDialog()">
                         新增
                     </button>
-                    <button class="red-btn manage-btn pointer">删除</button>
+                    <button class="red-btn manage-btn pointer" onclick="deleteProduct()">
+                        删除
+                    </button>
                 </div>
                 <div class="table-box">
                     <table>
@@ -242,6 +244,19 @@
             });
 
             clearForm('add-form')
+        }
+
+        function deleteProduct() {
+            if (selectedProduct && selectedProduct.id) {
+                const id = selectedProduct.id;
+                fetch(`https://dummyjson.com/products/${id}`, {
+                    method: 'DELETE',
+                })
+                .then(res => res.json())
+                .then(console.log);
+            } else {
+                console.log("请选中一个产品！");
+            }
         }
     </script>
 </html>
